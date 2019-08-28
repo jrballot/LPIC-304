@@ -83,7 +83,7 @@ Terms and Utilities:
 - qemu-img
 ---
 
- ### OpenSuse KVM installation
+### OpenSuse KVM installation
 
 In order to install KVM with QEMU and libvirt on OpenSuse 15.1 you will need to install two patterns:
 
@@ -93,6 +93,16 @@ In order to install KVM with QEMU and libvirt on OpenSuse 15.1 you will need to 
  ```SHELL
 $ sudo zypper in -t pattern kvm_server kvm_tools
  ```
+
+### CentOS 7 installation
+
+With CentOS you can install individual packages or use package groups like following:
+
+```SHELL
+# yum groupinstall "Virtualization Tools" --optional
+```
+
+This command will install libvirt, qemu-kvm, qemu-img and qemu-kvm-tools (--optional).
 
 
 
@@ -138,9 +148,9 @@ Terms and Utilities:
 - oVirt
 ---
 
-### OpenSuse libvirt installations
+### OpenSuse/CentOS libvirt installations
 
-Following the instructions in the previous chapter you should have libvirt installed. Otherwise install the pattern **kvm_tools**
+Following the instructions in the previous chapter you should have libvirt installed. Otherwise install the pattern **kvm_tools** for OpenSuse or the **Virtualization Tools** for RedHat based systems.
 
 ### Managing libvirtd
 
@@ -153,6 +163,29 @@ $ sudo systemctl enable libvirtd
 ```
  > WARNING: You should not run **libvirtd** and **xendomains** in parallel, they execute the same task and can interfere with one another.
 
+ Using **virt-install** to install
+
+ Options:
+ - --name : vm name
+ - --memory : amount of memory in MiB
+
+ Guest storage:
+ - --disk : storage configuration details, set to **none** for no disk space on vm
+ - --filesystem : path of the file system for the vm
+
+ Instalation method:
+ - --location : location of instalation media
+ - --cdrom : path for the ISO image, **CANNOT BE** a real CD/DVD-ROM device
+ - --pxe : PXE Boot
+ - --import : import a existing disk image
+ - --boot : define boot sequence
+
+ Creating a VM
+
+ ```SHELL
+ # virt-install --name guest-01 --memory 256Mib \
+   --vcpus 1 --disk size=8 --cdrom=$PATH/OS.iso --os-variant rhel7
+ ```
 
 
 ## 330.6 Cloud Management Tools
