@@ -1,5 +1,6 @@
-## Topic 335: High Availability Cluster Storage
-335.1 DRBD / cLVM
+# Topic 335: High Availability Cluster Storage
+
+## 335.1 DRBD / cLVM
 
 Weight: 3
 
@@ -32,7 +33,7 @@ Terms and Utilities:
     vgchange, vgs
 
 
-335.2 Clustered File Systems
+## 335.2 Clustered File Systems
 
 Weight: 3
 
