@@ -148,6 +148,42 @@ Terms and Utilities:
 - oVirt
 ---
 
+## Libvirt architecture, networking and storage
+
+### Architecture
+
+### Networking
+
+Every standard libvirt installation will have a NAT based connection. This is the "default" configuration. By running the command _virsh net-list --all_ the list of network will be displayed.
+
+If any definition or network is missed you can reload from the XML file.
+
+```SH
+# virsh net-define /usr/share/libvirt/networks/default.xml
+# virsh net-autostart default
+# virsh net-start default
+```
+
+The XML file, default.xml, contains the definition for the default NAT network. In this file you will see the bridge interface, gateway ip addess and dhcp range.
+
+```SH
+# cat /usr/share/libvirt/networks/default.xml
+<network>
+  <name>default</name>
+  <bridge name="virbr0"/>
+  <forward/>
+  <ip address="192.168.122.1" netmask="255.255.255.0">
+    <dhcp>
+      <range start="192.168.122.2" end="192.168.122.254"/>
+    </dhcp>
+  </ip>
+</network>
+
+```
+...
+
+### Storage
+
 ### OpenSuse/CentOS libvirt installations
 
 Following the instructions in the previous chapter you should have libvirt installed. Otherwise install the pattern **kvm_tools** for OpenSuse or the **Virtualization Tools** for RedHat based systems.
@@ -162,6 +198,9 @@ $ sudo systemctl enable libvirtd
 
 ```
  > WARNING: You should not run **libvirtd** and **xendomains** in parallel, they execute the same task and can interfere with one another.
+
+
+### Running a VM
 
  Using **virt-install** to install
 
@@ -187,6 +226,19 @@ $ sudo systemctl enable libvirtd
    --vcpus 1 --disk size=8 --cdrom=$PATH/OS.iso --os-variant rhel7
  ```
 
+This command will popup virt-viewer with the loaded iso. 
+
+After finishing the installation the vm will be ready for use. The disk will be of 8GiB with 256Mib RAM and a NAT network.
+
+### Virsh utility
+
+
+```SH
+# virsh list
+# virsh list --all
+```
+
+By running the 
 
 ## 330.6 Cloud Management Tools
 
