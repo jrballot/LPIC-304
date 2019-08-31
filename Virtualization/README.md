@@ -30,6 +30,22 @@ The following is a partial list of the used files, terms and utilities:
 
 ### Virtualization Concepts
 
+- Hypervisor
+
+### Migrations (P2V and V2V)
+
+
+### IaaS, PaaS and SaaS
+
+- **IaaS**
+**_Infrastructure as a Service_**: This kind of cloud solution isolate the Infrastructure layer, meaning hardware. The user only deals with OS installation but not with the type of hardware been used, allowing only a definition of the amount of VirtualCPUs, Memory and Disk Space to be defined.
+
+- PaaS
+**_Platform as a Service_**: This type of cloud solution isolate not only the infrastructure but also the OS level, letting the user interaction limited to a stack of services being used. For example cloud services on AWS and GCP.
+
+- SaaS
+**_Software as a Service_**: The last typy only allows the user to interact with a service, like gmail, dropbox, facebook, paypal.
+
 ## 330.2 Xen
 
 **Weight: 9**
@@ -226,7 +242,7 @@ $ sudo systemctl enable libvirtd
    --vcpus 1 --disk size=8 --cdrom=$PATH/OS.iso --os-variant rhel7
  ```
 
-This command will popup virt-viewer with the loaded iso. 
+This command will popup virt-viewer with the loaded iso.
 
 After finishing the installation the vm will be ready for use. The disk will be of 8GiB with 256Mib RAM and a NAT network.
 
@@ -238,7 +254,14 @@ After finishing the installation the vm will be ready for use. The disk will be 
 # virsh list --all
 ```
 
-By running the 
+#### Clonning VM
+
+When clonning a VM  ones can use virt-clone with the option --auto-clone.
+
+```SH
+$ sudo virt-clone --original=<original-domain> --name=<new-domain> --auto-clone
+```
+
 
 ## 330.6 Cloud Management Tools
 
