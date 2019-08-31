@@ -7,11 +7,11 @@ Description: Candidates should understand the properties and design approaches o
 
 Key Knowledge Areas:
 
-- Understand the most important cluster architectures
-- Understand recovery and cluster reorganization mechanisms
-- Design an appropriate cluster architecture for a given purpose
-- Application aspects of high availability
-- Operational considerations of high availability
+- [ ] Understand the most important cluster architectures
+- [ ] Understand recovery and cluster reorganization mechanisms
+- [ ] Design an appropriate cluster architecture for a given purpose
+- [ ] Application aspects of high availability
+- [ ] Operational considerations of high availability
 
 Terms and Utilities:
 
@@ -56,26 +56,26 @@ Description: Candidates should know how to install, configure, maintain and trou
 
 Key Knowledge Areas:
 
-- Understanding of LVS / IPVS
-- Basic knowledge of VRRP
-- Configuration of keepalived
-- Configuration of ldirectord
-- Backend server network configuration
-- Understanding of HAProxy
-- Configuration of HAProxy
+- [ ] Understanding of LVS / IPVS
+- [ ] Basic knowledge of VRRP
+- [ ] Configuration of keepalived
+- [ ] Configuration of ldirectord
+- [ ] Backend server network configuration
+- [ ] Understanding of HAProxy
+- [ ] Configuration of HAProxy
 
 Terms and Utilities:
 
-- ipvsadm
-- syncd
-- LVS Forwarding (NAT, Direct Routing, Tunneling, Local Node)
-- connection scheduling algorithms
-- keepalived configuration file
-- ldirectord configuration file
-- genhash
-- HAProxy configuration file
-- load balancing algorithms
-- ACLs
+- [ ] ipvsadm
+- [ ] syncd
+- [ ] LVS Forwarding (NAT, Direct Routing, Tunneling, Local Node)
+- [ ] connection scheduling algorithms
+- [ ] keepalived configuration file
+- [ ] ldirectord configuration file
+- [ ] genhash
+- [ ] HAProxy configuration file
+- [ ] load balancing algorithms
+- [ ] ACLs
 
 
 ## 334.3 Failover Clusters
@@ -86,36 +86,38 @@ Description: Candidates should have experience in the installation, configuratio
 
 Key Knowledge Areas:
 
-- Pacemaker architecture and components (CIB, CRMd, PEngine, LRMd, DC,STONITHd)
-- Pacemaker cluster configuration
-- Resource classes (OCF, LSB, Systemd, Upstart, Service, STONITH, Nagios)
-- Resource rules and constraints (location, order, colocation)
-- Advanced resource features (templates, groups, clone resources, multi-state resources)
-- Pacemaker management using pcs
-- Pacemaker management using crmsh
-- Configuration and Management of corosync in conjunction with Pacemaker
-- Awareness of other cluster engines (OpenAIS, Heartbeat, CMAN)
+- [ ] Pacemaker architecture and components (CIB, CRMd, PEngine, LRMd, DC,STONITHd)
+- [ ] Pacemaker cluster configuration
+- [ ] Resource classes (OCF, LSB, Systemd, Upstart, Service, STONITH, Nagios)
+- [ ] Resource rules and constraints (location, order, colocation)
+- [ ] Advanced resource features (templates, groups, clone resources, multi-state resources)
+- [ ] Pacemaker management using pcs
+- [ ] Pacemaker management using crmsh
+- [ ] Configuration and Management of corosync in conjunction with Pacemaker
+- [ ] Awareness of other cluster engines (OpenAIS, Heartbeat, CMAN)
 
 Terms and Utilities:
 
-- pcs
-- crm
-- crm_mon
-- crm_verify
-- crm_simulate
-- crm_shadow
-- crm_resource
-- crm_attribute
-- crm_node
-- crm_standby
-- cibadmin
-- corosync.conf
-- authkey
-- corosync-cfgtool
-- corosync-cmapctl
-- corosync-quorumtool
-- stonith_admin
+- [x] pcs
+- [ ] crm
+- [ ] crm_mon
+- [x] crm_verify
+- [ ] crm_simulate
+- [ ] crm_shadow
+- [ ] crm_resource
+- [ ] crm_attribute
+- [ ] crm_node
+- [ ] crm_standby
+- [ ] cibadmin
+- [ ] corosync.conf
+- [ ] authkey
+- [ ] corosync-cfgtool
+- [ ] corosync-cmapctl
+- [ ] corosync-quorumtool
+- [ ] stonith_admin
 ---
+### Pacemaker architecture
+
 
 ### PCS commands
 
@@ -173,6 +175,24 @@ The above message is saying that STONITH (Shoot the other Node in The Head) reso
 ```shell
 sudo pcs property set stonith-enabled=false
 ```
+
+### Pacemaker resources
+**Classes**
+- OCF
+An extension of LSB, has some constraints about returning status to determine the correct status of a resource or service.
+- LSB
+This class deals with /etc/ini.d scripts.
+- Systemd
+This class deals with systemd units
+- Upstart
+This class deals with upstart scripts
+- Service
+A special class created for dealing with a set of  system services, like Systemd, Upstart and LSB. Useful when a cluster is composed by a set of different OSs.
+- STONITH
+For dealing with Shoot the Other Node In The Head situations.
+- Nagios
+Use a Nagios Pluging to deal with remote hosts.
+
 
 
 
