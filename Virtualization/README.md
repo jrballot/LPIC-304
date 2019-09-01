@@ -30,10 +30,77 @@ The following is a partial list of the used files, terms and utilities:
 
 ### Virtualization Concepts
 
-- Hypervisor
+Virtualization in general has a lack of faces:
+
+```mermaid
+graph TD;
+v(Virtualization) --> appv(App Virtualization)
+v(Virtualization) --> netv(Network Virtualization)
+v(Virtualization) --> softv(Software Virtualization)
+v(Virtualization) --> stgv(Storage Virtualization)
+v(Virtualization) --> osvpart(OS Virtualization/Partitioning)
+v(Virtualization) --> etc(...)
+
+softv(Software Virtualization) --> fullv(Full Virtualization)
+softv(Software Virtualization) --> parav("Para Virtualization (Modified OS)")
+softv(Software Virtualization) --> hwv("Hardware Assisted Virtualization(Intel VT, AMD V)" )
+
+```
+
+**Protection Ring**
+- Ring -1/0/1/2/3 from Most to Least Privileged
+  - -1: Used only on HVM/HAV
+  - 0: Kernel Mode/Land
+  - 1: Not Used on normal OS, but used by Guest OS on Full Virtualization
+  - 2: Not Used
+  - 3: User Mode/Land, Application level
+
+#### Types of virtualization
+
+- **Hypervisor or Virtual Machine Monitor**
+<p>The system that runs the virtualization software ( KVM, QEMU, Xen, VMWare, VirtualBox). This is a layer of abstration between the   underlying hardware and the operational system running on top of it (Guest OS). Always running on Ring 0 near the Kernel.</p>
+
+- **Hardware Virtual Machine or Hardware Assisted Virtualization (HVM/HAV) NOT FINISHED**
+<p>This is a extension for the full virtualization. Created by Intel and AMD with the names **Virtualization Technology (VT)** and **Secure Virtual Machine (SMV)**, allwing the VMM/hypervisor to run a Guest OS that expects to run in kernel mode (Ring 0).</p>
+<br>
+
+- **Full virtualization**
+<p>In this virtualization type all privileged instructions are emulated to overcome the limitation arising from the Guest OS runing on Ring 1 and Hypervisor/VMM running on Ring 0. It relies on techniques, such as binary translation where the call is rewritten to run in Ring 0. With full virtualization one can run different Guest OS, Linux, Unix and Windows with the downside been a fall in performance.</p>
+<br>
+
+- **Paravirtualization**
+<p>This type of virtualization doesn't use  **system calls emulation interfaces**, normally seen when running different os from the Host. Because this layer is not present, alternative operational systems cannot be virtualized or acommodated. Even though all virtual machines/**container** are running under the same Kernel, they have their own filesystems, memory, processes, devices, etc. Despite not been able to run different operational systems, the user of this kind of virtualization have more performance then a Full Virtualization. Paravirtualization Guest OS runs in Ring 0 doing hypercalls to the virtualization layer on the same ring.</p>
+
+
+- Container Virtualization
+- **Emulation and Simulation**
+<p>Emulation and Simulation are two different approach for dealing with virtualization.
+
+QEMU can act like a Emulator when doing binary translation for running OS systems aimed for different hardware architectures, for example: ARM in x86. This binary translator is called Tiny Code Generator (TCG),a Just-In-Time compiler.  
+
+When acting like a simulator
+</p>
+
+### CPU Support for (Full) Virtualization
+
+- CPU Flags
+For a computer support a full virtualization its hardware needs to have some specific flags defined on the CPU: VT-x for Intel, AMD-V for AMD.
+```sh
+grep --color -Ew 'svm|vmx|lm' /proc/cpuinfo
+```
+The expression used above means that we are looking for Virtualization suport (svm,vmx) and 64bit support (lm), being:
+
+- svm: AMD virtualization support
+- vmx: Intel virtualization support
+- lm: x86_64 bits. From the source (include/asm/cpufeatures.h) "Long Mode (x86-64, 64-bit support)"
+
+
+
 
 ### Migrations (P2V and V2V)
 
+virt-v2v
+virt-p2v
 
 ### IaaS, PaaS and SaaS
 
@@ -142,6 +209,7 @@ Terms and Utilities:
 - docker
 - packer
 - vagrant
+
 
 
 ## 330.5 Libvirt and Related Tools
