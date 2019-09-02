@@ -187,6 +187,99 @@ With CentOS you can install individual packages or use package groups like follo
 
 This command will install libvirt, qemu-kvm, qemu-img and qemu-kvm-tools (--optional).
 
+### Network and Storage
+
+Virtual network switch known as the **bridge**, is the component responsible to connect virtual ports to which the interfaces to virtual machines are attached.
+
+```mermaid
+graph LR;
+
+bridge("bridge (Linux Bridge)") --> vnic1("VNIC related to VM 01");
+bridge("bridge (Linux Bridge)") --> vnic2("VNIC related to VM 02");
+```   
+
+A Virtual Interface can be of two types: **TUN** or **TAP**. A **TUN** interface which stands for "tunnel", simulates a network layer device (L3) dealing with IP packages. A **TAP** simulates a link layer device and it operates at layer 2, dealing with Ethernet frames.
+
+##### Setting up a Bridge and TAP interface
+
+For setting a bridge adapter we'll use brctl command from bridge-utils package.
+
+```SHELL
+sudo brctl show
+sudo brctl addbr tester
+sudo ip link show tester
+sudo ip tuntap add dev vm-vnic mode tap
+sudo ip link show vm-vnic
+sudo brctl addif tester vm-vnic
+sudo brctl show
+
+# Deleting this bridge
+
+sudo brctl delif tester vm-vnic
+sudo ip tuntap del dev vm-vnic mode tap
+sudo brctl delbr tester
+```
+
+#### Virtual Networking using libvirt
+
+When using libvirt for managing virtual networks we have a set of options to use:
+
+ - Isoleted virtual network
+ - Routed virtual network
+ - NATed virtual network
+ - Bridge network using physical NIC, CLAN interface bond interface and bonded VLAN interface
+ - MacVTap
+ - PCI passthrough NPIV
+ - OVS
+
+**Creating a Isolated virtual network**
+
+```sh
+$ vim isolated.xml
+<network>
+  <name>isolated</name>  # tag must be closed in the same line
+</network>
+$ sudo virsh net-define isolated.xml
+$ sudo virsh net-start isolated
+$ ifconfig / ip a / brctl show  # use one of to check if bridge exists
+```
+**Attaching interface to a instance**
+
+```sh
+LPIC-304$ sudo virsh domiflist debian10-01
+ Interface   Type      Source    Model   MAC
+------------------------------------------------------------
+ -           network   default   e1000   52:54:00:c3:28:f8
+
+LPIC-304$ sudo virsh start debian10-01    
+Domain debian10-01 started
+LPIC-304$ sudo virsh domiflist debian10-01
+Interface   Type      Source    Model   MAC
+------------------------------------------------------------
+vnet0       network   default   e1000   52:54:00:c3:28:f8
+
+
+LPIC-304$ sudo virsh attach-interface --domain debian10-01 --source isolated --type network --model virtio --config --live
+Interface attached successfully
+LPIC-304$ sudo virsh domiflist debian10-01
+ Interface   Type      Source     Model    MAC
+--------------------------------------------------------------
+ vnet0       network   default    e1000    52:54:00:c3:28:f8
+ vnet1       network   isolated   virtio   52:54:00:9b:c8:ef
+
+```
+
+The line **sudo virsh attach-interface --domain debian10-01 --source isolated --type network --model virtio --config --live** as some interesting options:
+
+- --domain debian10-01: Identify the vm to attach a interface
+- --source isolated: Specify the network we are attaching this interface to.
+- --type network: Network interface type (netwoirk for libvirt virtual network)
+  - bridge: indicate connection via a bridge device on the host
+  - direct: indicate connection directly to one of the host's network interfaces or bridges
+  - hostdev: indicate connection using a passthrough of PCI device on the host.
+- --model: network device model (????)
+- --config: affect the next startup of a pesistent domain
+- --live: affect a running domain
 
 
 ## 330.4 Other Virtualization Solutions
