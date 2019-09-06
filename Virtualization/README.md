@@ -187,7 +187,7 @@ With CentOS you can install individual packages or use package groups like follo
 
 This command will install libvirt, qemu-kvm, qemu-img and qemu-kvm-tools (--optional).
 
-### Network and Storage
+### Network
 
 Virtual network switch known as the **bridge**, is the component responsible to connect virtual ports to which the interfaces to virtual machines are attached.
 
@@ -199,6 +199,66 @@ bridge("bridge (Linux Bridge)") --> vnic2("VNIC related to VM 02");
 ```   
 
 A Virtual Interface can be of two types: **TUN** or **TAP**. A **TUN** interface which stands for "tunnel", simulates a network layer device (L3) dealing with IP packages. A **TAP** simulates a link layer device and it operates at layer 2, dealing with Ethernet frames.
+
+
+### Storage
+
+Creating a disk with dd:
+```sh
+dd if=/dev/zero of=<PATH>/disk2.img bs=1G count=10          # Preallocated
+dd if=/dev/zero of=<PATH>/disk3.img bs=1G seek=10 count=0   # Thin-provisioned
+```
+
+Attaching disk to a running VM/Domain:
+```SHELL
+sudo virsh attach-disk DOMAIN_NAME <PATH>/disk2.img vdb --live --config
+```
+Where:
+- **--live**: apply configuration to the running vm
+- **--config**: update the xml
+
+Check the applied configuration:
+
+```SHELL
+sudo virsh domblklist DOMAIN_NAME
+~$ sudo virsh domblklist centos7-01
+ Target   Source
+------------------------------------------------------------
+ vda      /var/lib/libvirt/images/centos7-01-1.qcow2
+ vdb      /home/jrballot/Documents/LPIC-304/dbvm_disk2.img
+ hda      -
+```
+
+##### Managing Storage
+
+When dealing with a pool of storage libvirt helps with a extensive list of types:
+- **dir**: Store disk on directory of your filesystem
+- **disk**: use physical hard disk to create virtual disk
+- **fs**: Uses pre-formatted partitions to store virtual disks
+- **netfs**: Uses network-shared storage like NFS to store virtual disks
+- **gluster**: Allows using the gluster filesystem to store virtual disks
+- **iscsi**: Uses network-shared ISCSI storage to store virtual disks
+- **scsi**: Uses local SCSI storage to store virtual disks
+- **lvm**: Depends on LVM volume groups to store virtual disks
+- **rbd**: Allows connecting ceph storage for virtual disks
+
+Creating a pool:
+
+```SHELL
+sudo virsh pool-define-as dedicated_storage dir - - -  "/opt/pool/"
+sudo virsh pool-list --all
+sudo virsh pool-build dedicated_storage
+sudo virsh pool-start dedicated_storage
+```
+
+Creating a volume from pool:
+
+```SHELL
+sudo virsh vol-list dedicated_storage
+sudo virsh vol-create-as dedicated_storage vm_vol1 10G
+sudo virsh vol-info --pool dedicated_storage vm_vol1
+sudo virsh vol-delete --pool dedicated_storage vm_vol1
+```
 
 ##### Setting up a Bridge and TAP interface
 
@@ -302,6 +362,8 @@ Terms and Utilities:
 - docker
 - packer
 - vagrant
+---
+
 
 
 
@@ -420,7 +482,7 @@ After finishing the installation the vm will be ready for use. The disk will be 
 When clonning a VM  ones can use virt-clone with the option --auto-clone.
 
 ```SH
-$ sudo virt-clone --original=<original-domain> --name=<new-domain> --auto-clone
+sudo virt-clone --original=<original-domain> --name=<new-domain> --auto-clone
 ```
 
 
