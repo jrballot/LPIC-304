@@ -19,18 +19,18 @@ Key Knowledge Areas:
 
 Terms and Utilities:
 
-- Protocol A, B and C
-- Primary, Secondary
-- Three-way replication
-- drbd kernel module
-- drbdadm
-- drbdsetup
-- drbdmeta
-- /etc/drbd.conf
-- /proc/drbd
-- LVM2
-- clvmd
-- vgchange, vgs
+- [x] Protocol A, B and C
+- [x] Primary, Secondary
+- [ ] Three-way replication
+- [x] drbd kernel module
+- [x] drbdadm
+- [ ] drbdsetup
+- [ ] drbdmeta
+- [x] /etc/drbd.conf
+- [x] /proc/drbd
+- [ ] LVM2
+- [ ] clvmd
+- [ ] vgchange, vgs
 ---
 ### Distributed Replicated Block Device (DRDB)
 
@@ -44,7 +44,7 @@ rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
 rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm
 ```
 
-> TIP: Disable ELRepo by default and only anable it when Using \
+> TIP: Disable ELRepo by default and only anable it when Using
 cp /etc/yum.repos.d/elrepo.repo /etc/yum.repos.d/elrepo.repo.ORG
 sed -i "s/enabled=1/enabled=0/g" /etc/yum.repos.d/elrepo.repo
 yum --enablerepo elrepo update
@@ -88,6 +88,7 @@ common{
 
 ```
 usage-count no;   Statistic usage collected by DRBD project (yes,no,ask)
+
 protocol C;  Replication modes (Asynchronous, Memory synchronous, Synchronous)
 - Asynchronous: Local write confirmed and packet placed in the TCP send buffer
 - Memory synchronous: Local write confirmed and packet has reached the peer node
@@ -184,20 +185,20 @@ Key Knowledge Areas:
 
 Terms and Utilities:
 
-- Distributed Lock Manager (DLM)
-- mkfs.gfs2
-- mount.gfs2
-- fsck.gfs2
-- gfs2_grow
-- gfs2_edit
-- gfs2_jadd
-- mkfs.ocfs2
-- mount.ocfs2
-- fsck.ocfs2
-- tunefs.ocfs2
-- mounted.ocfs2
-- o2info
-- o2image
-- CephFS
-- GlusterFS
-- AFS
+- [ ] Distributed Lock Manager (DLM)
+- [ ] mkfs.gfs2
+- [ ] mount.gfs2
+- [ ] fsck.gfs2
+- [ ] gfs2_grow
+- [ ] gfs2_edit
+- [ ] gfs2_jadd
+- [ ] mkfs.ocfs2
+- [ ] mount.ocfs2
+- [ ] fsck.ocfs2
+- [ ] tunefs.ocfs2
+- [ ] mounted.ocfs2
+- [ ] o2info
+- [ ] o2image
+- [ ] CephFS
+- [ ] GlusterFS
+- [ ] AFS

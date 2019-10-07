@@ -17,15 +17,15 @@ Key Knowledge Areas:
 
 The following is a partial list of the used files, terms and utilities:
 
-- Hypervisor
-- Hardware Virtual Machine (HVM)
-- Paravirtualization (PV)
-- Container Virtualization
-- Emulation and Simulation
-- CPU flags
-- /proc/cpuinfo
-- Migration (P2V, V2V)
-- IaaS, PaaS, SaaS
+- [x] Hypervisor
+- [x] Hardware Virtual Machine (HVM)
+- [x] Paravirtualization (PV)
+- [ ] Container Virtualization
+- [x] Emulation and Simulation
+- [x] CPU flags
+- [x] /proc/cpuinfo
+- [ ] Migration (P2V, V2V)
+- [x] IaaS, PaaS, SaaS
 ---
 
 ### Virtualization Concepts
@@ -132,14 +132,14 @@ Key Knowledge Areas:
 
 Terms and Utilities:
 
-- Domain0 (Dom0), DomainU (DomU)
-- PV-DomU, HVM-DomU
-- /etc/xen/
-- xl
-- xl.cfg
-- xl.conf
-- xe
-- xentop
+- [ ] Domain0 (Dom0), DomainU (DomU)
+- [ ] PV-DomU, HVM-DomU
+- [ ] /etc/xen/
+- [ ] xl
+- [ ] xl.cfg
+- [ ] xl.conf
+- [ ] xe
+- [ ] xentop
 
 ---
 ## 330.3 KVM
@@ -157,13 +157,13 @@ Key Knowledge Areas:
 
 Terms and Utilities:
 
-- Kernel modules: kvm, kvm-intel and kvm-amd
-- /etc/kvm/
-- /dev/kvm
-- kvm
-- KVM monitor
-- qemu
-- qemu-img
+- [x] Kernel modules: kvm, kvm-intel and kvm-amd
+- [ ] /etc/kvm/
+- [ ] /dev/kvm
+- [ ] kvm
+- [ ] KVM monitor
+- [ ] qemu
+- [ ] qemu-img
 ---
 
 ### OpenSuse KVM installation
@@ -356,15 +356,17 @@ Key Knowledge Areas:
 
 Terms and Utilities:
 
-- OpenVZ
-- VirtualBox
-- LXC
-- docker
-- packer
-- vagrant
+- [ ] OpenVZ
+- [ ] VirtualBox
+- [ ] LXC
+- [x] docker
+- [x] packer
+- [x] vagrant
 ---
 
+### OpenVZ
 
+### LXC
 
 
 ## 330.5 Libvirt and Related Tools
@@ -381,15 +383,19 @@ Key Knowledge Areas:
 
 Terms and Utilities:
 
-- libvirtd
-- /etc/libvirt/
-- virsh
-- oVirt
+- [x] libvirtd
+- [ ] /etc/libvirt/
+- [x] virsh
+- [ ] oVirt
 ---
 
-## Libvirt architecture, networking and storage
+### Libvirt architecture, networking and storage
+
+
 
 ### Architecture
+
+
 
 ### Networking
 
@@ -499,8 +505,8 @@ Key Knowledge Areas:
 
 Terms and Utilities:
 
-- OpenStack
-- CloudStack
-- Eucalyptus
-- OpenNebula
+- [x] OpenStack
+- [ ] CloudStack
+- [x] Eucalyptus
+- [ ] OpenNebula
 ---

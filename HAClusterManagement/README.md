@@ -7,19 +7,19 @@ Description: Candidates should understand the properties and design approaches o
 
 Key Knowledge Areas:
 
-- [ ] Understand the most important cluster architectures
-- [ ] Understand recovery and cluster reorganization mechanisms
-- [ ] Design an appropriate cluster architecture for a given purpose
-- [ ] Application aspects of high availability
-- [ ] Operational considerations of high availability
+- Understand the most important cluster architectures
+- Understand recovery and cluster reorganization mechanisms
+- Design an appropriate cluster architecture for a given purpose
+- Application aspects of high availability
+- Operational considerations of high availability
 
 Terms and Utilities:
 
 - [x] Active/Passive Cluster, Active/Active Cluster
-- [ ] Failover Cluster, Load Balanced Cluster
-- [ ] Shared-Nothing Cluster, Shared-Disk Cluster
-- [ ] Cluster resources
-- [ ] Cluster services
+- [x] Failover Cluster, Load Balanced Cluster
+- [x] Shared-Nothing Cluster, Shared-Disk Cluster
+- [x] Cluster resources
+- [x] Cluster services
 - [x] Quorum
 - [x] Fencing
 - [x] Split brain
@@ -39,6 +39,29 @@ In this type of cluster, all nodes are active at the same time. Thus, they are a
 **Active/Passive (A/P)**
 In this type of cluster, there is an active node and a passive node. The former handles all traffic under normal circumstances, while the latter just sits idle waiting to enter the scene during a failover, when it actually takes over the situation by servicing requests using its own resource until the other node comes back online.
 
+**Shared-Memory Cluster**
+
+
+**Shared-Disk Cluster**
+
+A shared-disk cluster uses a remote pool for storage, basically a SAN or NAS solution. Problem I/O on disk been a bottleneck for scalability.
+
+**Shared-Nothing Cluster**
+
+In a shared-nothing cluster  things scale horizontally across nodes, memory and disk are managed locally and all communication goes through network. Only one node can be owner of a specific resource at a time.
+
+**Failover Cluster**
+
+
+**Load Balancer Cluster**
+A farm of servers with the same function is the base of a load balancing cluster. To distribute the user request to several nodes, a load balancer is useful. It's going to check the utilization of all nodes and via algorithms decide to which node redirect the user request.
+
+**Cluster resource**
+The resources needed to be high available for the business continuity.Can be replicated to one or more nodes from the cluster. Pacemaker uses resources like disk and ip that needs to be available all the time.
+
+**Cluster service**
+THe software used to create a high available environment, it controls failover cluster activite on a single node. Pacemaker and Corosync.
+
 ### Vocabulary
 
 - **Failover**: A premier on high availability and performance
@@ -56,13 +79,13 @@ Description: Candidates should know how to install, configure, maintain and trou
 
 Key Knowledge Areas:
 
-- [ ] Understanding of LVS / IPVS
-- [ ] Basic knowledge of VRRP
-- [ ] Configuration of keepalived
-- [ ] Configuration of ldirectord
-- [ ] Backend server network configuration
-- [ ] Understanding of HAProxy
-- [ ] Configuration of HAProxy
+- Understanding of LVS / IPVS
+- Basic knowledge of VRRP
+- Configuration of keepalived
+- Configuration of ldirectord
+- Backend server network configuration
+- Understanding of HAProxy
+- Configuration of HAProxy
 
 Terms and Utilities:
 
@@ -86,28 +109,28 @@ Description: Candidates should have experience in the installation, configuratio
 
 Key Knowledge Areas:
 
-- [ ] Pacemaker architecture and components (CIB, CRMd, PEngine, LRMd, DC,STONITHd)
-- [ ] Pacemaker cluster configuration
-- [ ] Resource classes (OCF, LSB, Systemd, Upstart, Service, STONITH, Nagios)
-- [ ] Resource rules and constraints (location, order, colocation)
-- [ ] Advanced resource features (templates, groups, clone resources, multi-state resources)
-- [ ] Pacemaker management using pcs
-- [ ] Pacemaker management using crmsh
-- [ ] Configuration and Management of corosync in conjunction with Pacemaker
-- [ ] Awareness of other cluster engines (OpenAIS, Heartbeat, CMAN)
+- Pacemaker architecture and components (CIB, CRMd, PEngine, LRMd, DC,STONITHd)
+- Pacemaker cluster configuration
+- Resource classes (OCF, LSB, Systemd, Upstart, Service, STONITH, Nagios)
+- Resource rules and constraints (location, order, colocation)
+- Advanced resource features (templates, groups, clone resources, multi-state resources)
+- Pacemaker management using pcs
+- Pacemaker management using crmsh
+- Configuration and Management of corosync in conjunction with Pacemaker
+- Awareness of other cluster engines (OpenAIS, Heartbeat, CMAN)
 
 Terms and Utilities:
 
 - [x] pcs
-- [ ] crm
-- [ ] crm_mon
+- [x] crm
+- [x] crm_mon
 - [x] crm_verify
-- [ ] crm_simulate
-- [ ] crm_shadow
-- [ ] crm_resource
-- [ ] crm_attribute
-- [ ] crm_node
-- [ ] crm_standby
+- [x] crm_simulate
+- [x] crm_shadow
+- [x] crm_resource
+- [x] crm_attribute
+- [x] crm_node
+- [x] crm_standby (convenience wrapper for crm_attribute)
 - [ ] cibadmin
 - [ ] corosync.conf
 - [ ] authkey
@@ -118,6 +141,12 @@ Terms and Utilities:
 ---
 ### Pacemaker architecture
 
+**CIB** :  
+CRMd
+PEngine
+LRMd
+DC
+STONITHd
 
 ### PCS commands
 
@@ -133,13 +162,49 @@ pcs cluster stop
 
 
 
-Double checking with corosync-cmapctl command. This will allow access to the cluster's object database where can be seen properties and configurations of each node.
+Double checking with corosync-cmapctl command. This will allow access to the cluster's object database (CIB) where can be seen properties and configurations of each node.
 
 ```SH
 corosync-cmapctl | grep -Ei 'cluster''_name|members'
 ```
 
+### Cluster Resource Management (CRM)
 
+- crm_mon: provides a summary of cluster's current state
+  - crm_mon --group-by-node --inactive
+  - crm_mon --daemonize --as-html /var/www/html/index.html
+  - crm_mon --as-xml
+- crm_verify: verify syntax and conceptual errors on xml configuration files
+  - crm_verify --live-check
+  - crm_verify --xml-file <path>/file.xml
+- crm_simulate: This tool will simulate actions in the cluster
+- crm_shadow: Create a copy of the running cluster for testing
+  - crm_shadow --create myShadow
+  - crm_shadow --create-empty myShadow
+  - crm_shadow --commit myShadow # apply this shadown configuration to the running cluster
+  - crm_shadow --delete myShadow --force
+- crm_resource: Perform tasks on available resources
+  - crm_resource --list-agents ocf
+  - crm_resource --list-agents ocf:Heartbeat
+  - crm_resource --resource virtual_ip --move --node 02.centos7
+  - crm_resource --resource virtual_ip --clear
+  - crm_resource --resource virtual_ip --set-parameter target-role --meta --parameter-value Stopped
+  - crm_resource --resource virtual_ip --set-parameter is-managed --meta --parameter-value false # cluster will not attempt to start or stop a resource
+  - crm_resource --resource virtual_ip --cleanup --node 02.centos7 # will ignore the current state and attempt to recover the resource
+- crm_attribute: Allows node attributes and cluster options to be queried, modified and deleted
+  - crm_attribute --node 02.centos7 --name location --update myHomeLab
+  - crm_attribute --node 02.centos7 --name localtion --query --quiet
+  - crm_attribute --node 02.centos7 --name location --delete
+  - crm_attribute --type crm_config --name cluster-delay --query # cluster delay info
+- crm_node: Tool for displaying low-level node information
+  - crm_node --list
+  - crm_node --name
+  - crm_node --name-for-id=01.centos7
+  - crm_node --quorum   
+  - crm_node --cluster-id
+  - crm_node --partition
+- crm_standby: Convenience wrapper for crm_attribute, turn on/off standby mode which will make the node not host cluster resource
+  - crm_standby
 
 
 ### Setting up a virtual IP for the cluster
@@ -209,5 +274,5 @@ Key Knowledge Areas:
 
 Terms and Utilities:
 
-- Distribution specific configuration tools
-- Integration of cluster engines, load balancers, storage technology, cluster filesystems, etc.
+- [ ] Distribution specific configuration tools
+- [ ] Integration of cluster engines, load balancers, storage technology, cluster filesystems, etc.
