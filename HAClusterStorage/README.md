@@ -89,10 +89,11 @@ common{
 ```
 usage-count no;   Statistic usage collected by DRBD project (yes,no,ask)
 
-protocol C;  Replication modes (Asynchronous, Memory synchronous, Synchronous)
-- Asynchronous: Local write confirmed and packet placed in the TCP send buffer
-- Memory synchronous: Local write confirmed and packet has reached the peer node
-- Synchronous: Local and remote write confirmed
+
+Replication modes (Asynchronous, Memory synchronous, Synchronous)
+- protocol A: Asynchronous - Local write confirmed and packet placed in the TCP send buffer
+- protocol B: Memory synchronous - Local write confirmed and packet has reached the peer node
+- protocol C: Synchronous - Local and remote write confirmed
 
 ```SHELL
 vim /etc/drbd.d/drbd0.res

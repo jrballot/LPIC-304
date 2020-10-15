@@ -20,11 +20,11 @@ The following is a partial list of the used files, terms and utilities:
 - [x] Hypervisor
 - [x] Hardware Virtual Machine (HVM)
 - [x] Paravirtualization (PV)
-- [ ] Container Virtualization
+- [x] Container Virtualization
 - [x] Emulation and Simulation
 - [x] CPU flags
 - [x] /proc/cpuinfo
-- [ ] Migration (P2V, V2V)
+- [x] Migration (P2V, V2V)
 - [x] IaaS, PaaS, SaaS
 ---
 
@@ -49,7 +49,7 @@ softv(Software Virtualization) --> hwv("Hardware Assisted Virtualization(Intel V
 
 **Protection Ring**
 - Ring -1/0/1/2/3 from Most to Least Privileged
-  - -1: Used only on HVM/HAV
+  - -1: Used only on HVM/HAV - Normally is where your hypervisor will sit on.
   - 0: Kernel Mode/Land
   - 1: Not Used on normal OS, but used by Guest OS on Full Virtualization
   - 2: Not Used
@@ -142,6 +142,85 @@ Terms and Utilities:
 - [ ] xentop
 
 ---
+
+Dom0 - Default have drivers
+DomU - Guests
+
+configs in /etc/xen/
+/etc/xen/xlubuntu01.hvm -> Full-virtualization
+/etc/xen/xlubuntu02.pvlinux -> Paravirtualization
+
+Diff:
+```
+* Do tipo HVM:
+builder = "hvm"
+
+----------------------------------
+
+* Do tipo Paravirtualizado:
+# Kernel image to boot
+kernel = "/boot/vmlinuz"
+
+# Ramdisk (optional)
+#ramdisk = "/boot/initrd.gz"
+
+# Kernel command line options
+extra = "root=/dev/xvda1"
+
+```
+
+Network:
+```
+eth0 → vif4.0 → eth0(Dom-4)
+```
+Max -> 00:16:3e:xx:xx:xx
+
+/etc/xen/xl.conf -> all Guests
+```
+vif=[ 'bridge=xenbr0' ]
+---
+# OVS
+vif.default.script="vif-openvswitch"
+vif.default.bridge="ovsbr0"
+```
+
+Storage
+Use LVM but can use images like raw and qcow2
+LVM is preferable
+
+```
+disk = [ 'phy:/dev/vg/guest-volume,raw,xvda,rw' ]
+```
+
+Commands:
+
+xl create domU_CONFIG
+xl create hvm.cfg 'cpus="0-3"; pci=["01:05.1","01:02.2"]'
+xl config-update domid [configfile]
+xl console domain-id
+xl destroy domain-id
+xl pause domain-id
+xl reboot domain-id
+xl restore domain-id
+xl shutdown domain-id
+xl list
+
+
+xentop
+xenpm
+
+XAPI -> xe command
+
+xe vm-start vm=<TARGET>
+xe vm-destroy uuid=<TARGET>
+xe sr-create name-label=<> physical-size=<> type=<> content-type=<> device-config:<config_name>=<>
+xe vm-install
+xe vif-create
+
+XenStore(xenstored)
+xenstore-ls -f
+xenstore-write
+
 ## 330.3 KVM
 
 **Weight: 9**

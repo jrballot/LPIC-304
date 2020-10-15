@@ -258,7 +258,13 @@ For dealing with Shoot the Other Node In The Head situations.
 - Nagios
 Use a Nagios Pluging to deal with remote hosts.
 
+### Awareness of other cluster engines
 
+OpenAIS
+
+Heartbeat
+
+CMAN
 
 
 ## 334.4 High Availability in Enterprise Linux Distributions
